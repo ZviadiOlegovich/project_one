@@ -2,3 +2,4 @@
 
 function main():
     print()
+    print()
