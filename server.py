@@ -1,3 +1,4 @@
+# Должны быть запущены 2 Docker конейнера: "MySQL" and "PHPadmin"(для подключения к БД)
 from flask import Flask, request
 import json
 import mysql.connector
@@ -19,30 +20,16 @@ def connect_to_db(config_file):
     return db
 
 
-# file = open("dbConfig.txt", encoding= "utf-8")
-# t1 = file.readlines()
-
-
-# db = mysql.connector.connect(t1)
-
-# # Настройки подключения к базе данных
-# # db = mysql.connector.connect(
-# #     host="localhost",
-# #     user="root",
-# #     password="Ford2008",
-# #     database="todo",
-# #     port="33306"
-# # )
-
 
 # Подключение к базе данных
 db = connect_to_db("mysql_config.json")
 
 
-
+# Маршрут для главной страницы
 @app.route('/') 
 def index():
     return "This website is very bad."
+
 
 # Маршрут для выполнения запроса GET
 @app.route('/data/', methods=['GET'])
@@ -53,6 +40,7 @@ def get_task():
     db.commit() 
     cursor.close()
     return result    
+
 
 # Маршрут для выполнения запроса GET
 @app.route('/data/<int:id>', methods=['GET'])
@@ -74,7 +62,8 @@ def post_data():
     cursor.execute("INSERT INTO task (title, description) VALUES (%s, %s)", (title, description))
     db.commit()
     cursor.close()
-    return 'Data added successfully'
+    return 'Data added successfully' 
+
 
 # Маршрут для выполнения запроса PUT
 @app.route('/data/<int:id>', methods=['PUT'])
