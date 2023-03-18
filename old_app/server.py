@@ -1,5 +1,5 @@
 # Должны быть запущены 2 Docker конейнера: "MySQL" and "PHPadmin"(для подключения к БД)
-from flask import Flask, request
+from flask import Flask, jsonify, request
 import json
 import mysql.connector
 
@@ -22,7 +22,7 @@ def connect_to_db(config_file):
 
 
 # Подключение к базе данных
-db = connect_to_db("mysql_config.json")
+db = connect_to_db("c:/Users/zoshc/workspace/project_one/mysql_config.json")
 
 
 # Маршрут для главной страницы
@@ -61,8 +61,9 @@ def post_data():
     description = request.json.get('description')
     cursor.execute("INSERT INTO task (title, description) VALUES (%s, %s)", (title, description))
     db.commit()
+    task_id = cursor.lastrowid
     cursor.close()
-    return 'Data added successfully' 
+    return jsonify({"Data added": 'successfully','TaskID': task_id})
 
 
 # Маршрут для выполнения запроса PUT
