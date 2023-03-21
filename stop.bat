@@ -1,1 +1,0 @@
- docker stop phpmyadmin & docker stop todolist

@@ -1,8 +1,9 @@
 import json
 import mysql.connector
+from app.storage import Storage
+from app.task import Task
 
-
-class DB:
+class Database(Storage):
     def __init__(self, config_file):
         with open(config_file, 'r') as f:
             config = json.load(f)
@@ -15,8 +16,8 @@ class DB:
             port=config['port']
         )
 
-    def close_connection(self):
-        self.db.close()
+    def info(self):
+        return "storage info"
 
     def get_all_tasks(self):
         cursor = self.db.cursor()
@@ -26,7 +27,7 @@ class DB:
         cursor.close()
         return result    
 
-    def get_task_by_id(self, id):
+    def get_task_by_id(self, id: int) -> Task:
         cursor = self.db.cursor()
         cursor.execute("SELECT * FROM task WHERE id = %s", (id,))
         result = cursor.fetchall()
@@ -34,24 +35,29 @@ class DB:
         cursor.close()
         return result    
 
-    def add_task(self, title, description):
+    def insert_task(self, task: Task):
         cursor = self.db.cursor()
-        cursor.execute("INSERT INTO task (title, description) VALUES (%s, %s)", (title, description))
+        cursor.execute("INSERT INTO task (title, description) VALUES (%s, %s)", 
+                       (task.title, task.description))
         self.db.commit()
         task_id = cursor.lastrowid
         cursor.close()
         return task_id
 
-    def update_task(self, id, status):
+    def update_task(self, task: Task):
         cursor = self.db.cursor()
-        cursor.execute("UPDATE task SET status=%s WHERE id=%s", (status, id))
+        cursor.execute("UPDATE task SET title = %s, description = %s, status=%s WHERE id=%s", 
+                       (task.title, task.description, task.status, task.id))
         self.db.commit()
         cursor.close()
-        return f'Task {id}, status changed to {status}'
+        return 
 
     def delete_task_by_id(self, id):
         cursor = self.db.cursor()
         cursor.execute("DELETE FROM task WHERE  id=%s", (id,))
         self.db.commit() 
         cursor.close()
-        return f'Task {id}, deleted from DB'
+        return 
+
+    def close_connection(self):
+        self.db.close()

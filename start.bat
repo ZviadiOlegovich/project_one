@@ -1,1 +1,0 @@
-docker start todolist && docker start phpmyadmin  && code
