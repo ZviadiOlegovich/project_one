@@ -1,0 +1,18 @@
+inputed incorrect URL (2023-03-21 18:12:24.210823)inputed incorrect URL (2023-03-21 18:12:33.160107)
+inputed incorrect URL (2023-03-21 18:12:49.970175)
+inputed incorrect URL (2023-03-21 18:12:53.287588)
+inputed incorrect URL (2023-03-21 18:12:53.797859)
+inputed incorrect URL (2023-03-21 20:04:27.398775)
+inputed incorrect URL (2023-03-21 20:09:51.105828)
+system Error (1064)
+system Error 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'FROM task' at line 1(1064)
+system Error 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'FROM task' at line 1(1064)
+Time: 2023-03-22 14:18:08.429388; Error: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'FROM task' at line 1
+Time: 2023-03-22 14:20:17.175338; Error: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'FROM task' at line 1
+Time: 2023-03-22 14:20:34.068612; Error: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'FROM task' at line 1
+Time: 2023-03-22 14:29:48.410233; Error: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'FROM task' at line 1
+Time: 2023-03-22 14:34:22.808048; Error: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'FROM task' at line 1
+Time: 2023-03-22 14:34:26.101813; Error: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'FROM task' at line 1
+Time: 2023-03-22 15:06:53.912761; Error: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'FROM task' at line 1
+Time: 2023-03-22 15:09:04.274776; Error: App.find_task_by_id() missing 1 required positional argument: 'id'
+Time: 2023-03-23 13:58:34.350009; Error: list index out of range

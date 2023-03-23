@@ -33,6 +33,7 @@ class Database(Storage):
         result = cursor.fetchall()
         self.db.commit() 
         cursor.close()
+        print(result[0][3])
         return result    
 
     def insert_task(self, task: Task):
