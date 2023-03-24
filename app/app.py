@@ -1,10 +1,10 @@
 from app.task import Task
 from app.storage import Storage
-from app.validator_interface import ValidIn
+from app.validator_interface import Validator
  
 
 class App:
-    def __init__(self, db: Storage, validator : ValidIn):
+    def __init__(self, db: Storage, validator : Validator):
         self.db = db
         self.vd = validator
 
@@ -24,7 +24,7 @@ class App:
 
 
     def create_new_task(self, task: Task):
-        if self.vd.valid_title(task):
+        if self.vd.is_valid(task):
             rs = self.db.insert_task(task)
             return {"Data added": 'successfully', 'TaskID': rs}
         else:
@@ -34,7 +34,7 @@ class App:
     def update_task(self, task: Task):
         rs = self.db.get_task_by_id(task.id)
         if rs != []:
-            if self.vd.valid_title(task):
+            if self.vd.is_valid(task):
                 self.db.update_task(task)
                 return f'Task {task.id}, status changed to {task.status}'
             else:

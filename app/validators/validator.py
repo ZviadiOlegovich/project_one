@@ -1,11 +1,11 @@
 from app.task import Task
-from app.validator_interface import ValidIn
+from app.validator_interface import Validator
 
-class IsValid(ValidIn):
+class TitleLangthValidator(Validator):# title langth validator
     # min = 5
     # max = 60
     
-    def valid_title(self, task: Task) -> bool:
+    def is_valid(self, task: Task) -> bool:
         if 5 <= len(task.title) < 60:
             return True
         else:

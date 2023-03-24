@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
 from app.task import Task
 
-class ValidIn(ABC):
+class Validator(ABC):# validator
     
     @abstractmethod
-    def valid_title(self, task : Task) -> bool:
-        pass
+    def is_valid(self, task : Task) -> bool:
+        pass #isvalid
         
