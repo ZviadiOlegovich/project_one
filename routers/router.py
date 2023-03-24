@@ -36,7 +36,8 @@ class TaskRoutes:
             return jsonify({'title' : task.title,
                             'description' : task.description})
         except Exception:
-            return handling_exceptions('task by id')
+            ans = f"task {id} - not found1"
+            return handling_exceptions(ans)
 
 
     def insert_task(self):
@@ -75,7 +76,7 @@ def handling_exceptions(str):
     with open('data\logs.log', 'a') as lf:
         tm = datetime.now()
         lf.write(F"Time: {tm}; Error: {e}\n")
-    return "Sorry, try change URL " + str , 500
+    return "Sorry, " + str , 500
 
 
 #     @router.errorhandler(404)

@@ -1,12 +1,16 @@
 from db.mysql import Database
-from app.validators.validator import TitleLangthValidator
+from validators.title_length import TitleLengthValidator
+from validators.description_length import DescriptionLengthValidator
+from validators.composite import Composite
 from app.app import App
 from flask import Flask
 from routers.router import TaskRoutes
 
 # Подключение к базе данных
 db = Database("c:/Users/zoshc/workspace/mysql_config.json")
-validator = TitleLangthValidator()
+validator1  = TitleLengthValidator()
+validator2  = DescriptionLengthValidator()
+validator = Composite([validator1, validator2])
 app = App(db, validator)
 router = Flask(__name__)
 task_routes = TaskRoutes(app, router)

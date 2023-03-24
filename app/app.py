@@ -14,31 +14,30 @@ class App:
     def find_tasks(self):
         return self.db.get_all_tasks()
     
-    def find_task_by_id(self, id):
-        id1 = id        
-        ts = self.db.get_task_by_id(id)
-        if ts.id > 0:
-            return ts
-        else:
-            return f"task {id1} - not found1"
+    def find_task_by_id(self, id):               
+        task = self.db.get_task_by_id(id)
+        return task
+        
 
 
     def create_new_task(self, task: Task):
-        if self.vd.is_valid(task):
+        ok, err = self.vd.is_valid(task)
+        if ok:
             rs = self.db.insert_task(task)
             return {"Data added": 'successfully', 'TaskID': rs}
         else:
             return {"Data added": 'unsuccessfully', 
-                    'Error': "Task title must between 5 on 60 simbols"}
+                    'Error': err}
     
     def update_task(self, task: Task):
         rs = self.db.get_task_by_id(task.id)
         if rs != []:
-            if self.vd.is_valid(task):
+            ok, err = self.vd.is_valid(task)
+            if ok:
                 self.db.update_task(task)
                 return f'Task {task.id}, status changed to {task.status}'
             else:
-                return "Task title must between 5 on 60 simbols"
+                return err
         else:
             return f"task {task.id} - not found"
         
