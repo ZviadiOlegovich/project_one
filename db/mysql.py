@@ -30,11 +30,11 @@ class Database(Storage):
     def get_task_by_id(self, id: int) -> Task:
         cursor = self.db.cursor()
         cursor.execute("SELECT * FROM task WHERE id = %s", (id,))
-        result = cursor.fetchall()
+        r = cursor.fetchall()
+        task = Task(r[0][0],r[0][1],r[0][2],r[0][3])
         self.db.commit() 
-        cursor.close()
-        print(result[0][3])
-        return result    
+        cursor.close()               
+        return task   
 
     def insert_task(self, task: Task):
         cursor = self.db.cursor()

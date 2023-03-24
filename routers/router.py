@@ -33,9 +33,10 @@ class TaskRoutes:
     def get_task_by_id(self, id):
         try:            
             task = self.app.find_task_by_id(id)
-            return jsonify(task)
+            return jsonify({'title' : task.title,
+                            'description' : task.description})
         except Exception:
-            return handling_exceptions()
+            return handling_exceptions('task by id')
 
 
     def insert_task(self):
@@ -43,10 +44,10 @@ class TaskRoutes:
             title = request.json.get('title')
             description = request.json.get('description')
             task = Task(0, title, description)
-            result = self.app.create_task(task)
+            result = self.app.create_new_task(task)
             return jsonify(result)
         except Exception:
-            return handling_exceptions()
+            return handling_exceptions('insert')
 
     def update_task(self, id):
         try:
@@ -57,24 +58,24 @@ class TaskRoutes:
             result = self.app.update_task(task)
             return jsonify(result)
         except Exception:
-            return handling_exceptions()
+            return handling_exceptions('update')
 
     def delete_task(self, id):
         try:
             result = self.app.delete_task_by_id(id)
             return jsonify({'result': result})
         except Exception:
-            return handling_exceptions()
+            return handling_exceptions('delete')
 
     def response_error(self):
         pass
 
-def handling_exceptions():
+def handling_exceptions(str):
     e = sys.exc_info()[1]            
-    with open('log_file.txt', 'a') as lf:
+    with open('data\logs.log', 'a') as lf:
         tm = datetime.now()
         lf.write(F"Time: {tm}; Error: {e}\n")
-    return "Sorry, try change URL" , 500
+    return "Sorry, try change URL " + str , 500
 
 
 #     @router.errorhandler(404)
