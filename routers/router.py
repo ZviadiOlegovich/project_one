@@ -3,6 +3,7 @@ from app.app import App
 from app.task import Task
 from datetime import datetime
 import sys
+import traceback
 
 class TaskRoutes:
     def __init__(self, app: App, router):
@@ -76,6 +77,8 @@ def handling_exceptions(str):
     with open('data\logs.log', 'a') as lf:
         tm = datetime.now()
         lf.write(F"Time: {tm}; Error: {e}\n")
+        traceback.print_exc(file=lf)
+             
     return "Sorry, " + str , 500
 
 
