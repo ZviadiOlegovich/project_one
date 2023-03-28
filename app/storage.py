@@ -8,7 +8,7 @@ class Storage(ABC):
         pass
 
     @abstractmethod
-    def get_all_tasks(self, id: int) -> Task:
+    def get_all_tasks(self, id: int):
         pass
 
     @abstractmethod

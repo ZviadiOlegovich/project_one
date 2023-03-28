@@ -1,20 +1,11 @@
-import json
-import mysql.connector
+# import mysql.connector
 from app.storage import Storage
 from app.task import Task
 
 class Database(Storage):
-    def __init__(self, config_file):
-        with open(config_file, 'r') as f:
-            config = json.load(f)
-
-        self.db = mysql.connector.connect(
-            host=config['host'],
-            user=config['user'],
-            password=config['password'],
-            database=config['database'],
-            port=config['port']
-        )
+    def __init__(self, connect):
+        self.db = connect
+        
 
     def info(self):
         return "storage info"
@@ -36,14 +27,14 @@ class Database(Storage):
         cursor.close()               
         return task   
 
-    def insert_task(self, task: Task):
+    def insert_task(self, task: Task) -> Task:
         cursor = self.db.cursor()
         cursor.execute("INSERT INTO task (title, description) VALUES (%s, %s)", 
                        (task.title, task.description))
         self.db.commit()
-        task_id = cursor.lastrowid
+        task.id = cursor.lastrowid
         cursor.close()
-        return task_id
+        return task
 
     def update_task(self, task: Task):
         cursor = self.db.cursor()
