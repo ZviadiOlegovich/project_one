@@ -1,14 +1,15 @@
-from app.notify_interface import Notify
+from app.add_eventL_interface import Notificator
 from app.task import Task
 
-class CompositeNotify(Notify):
+class CompositeNotify(Notificator):
     
     def __init__(self, notifies : list):
         self.notifies = notifies
         
-    def is_notify(self, task: Task, event: str, date):
+    def notify(self, task: Task, event: str):
         
         for n in self.notifies: 
-            n.is_notify(task, event, date)   
+            n.notify(task, event)   
              
         return
+    

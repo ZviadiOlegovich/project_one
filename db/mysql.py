@@ -2,7 +2,7 @@
 from app.storage import Storage
 from app.task import Task
 
-class Database(Storage):
+class MySQLdb(Storage):
     def __init__(self, connect):
         self.db = connect
         

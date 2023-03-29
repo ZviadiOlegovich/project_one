@@ -1,8 +1,12 @@
 from abc import ABC, abstractmethod
 from app.task import Task
 
-class Notify(ABC):
+class EventLogStorage(ABC):
     
     @abstractmethod
-    def is_notify(self, task : Task, event : str, date): 
+    def insert(self, task : Task, event : str): 
+        pass
+    
+    @abstractmethod
+    def task_event_by_id(self, id : int):
         pass

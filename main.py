@@ -1,13 +1,14 @@
 import json
 import mysql.connector
-from db.mysql import Database
+from db.mysql import MySQLdb
+from db.event_log_storage import EventLOGdb
 from validators.title_length import TitleLengthValidator
 from validators.description_length import DescriptionLengthValidator
 from validators.composite_valid import Composite
 from filters.trip_filter import WhitespaceFilter
 from filters.upper_filter import CapitalizeFilter
 from filters.composite_filter import CompositeFilter
-from app.event_log_storage import EventLog
+from notificators.event_log import EventLog
 from notificators.composite_notify import CompositeNotify
 from app.app import App
 from flask import Flask
@@ -24,8 +25,9 @@ password=config['password'],
 database=config['database'],
 port=config['port']
     )
-db = Database(db_con)# ПЕРЕименовать в таски и создать ивент лог
-notify1 = EventLog(db_con)
+db = MySQLdb(db_con)
+els = EventLOGdb(db_con)
+notify1 = EventLog(els)
 notify = CompositeNotify([notify1])
 validator1, validator2  = TitleLengthValidator(), DescriptionLengthValidator()
 validator = Composite([validator1, validator2])
