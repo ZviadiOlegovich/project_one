@@ -1,6 +1,8 @@
 # import mysql.connector
+from datetime import datetime
 from app.storage import Storage
 from app.task import Task
+
 
 class MySQLdb(Storage):
     def __init__(self, connect):
@@ -13,33 +15,37 @@ class MySQLdb(Storage):
     def get_all_tasks(self):
         cursor = self.db.cursor()
         cursor.execute("SELECT * FROM task")
-        result = cursor.fetchall()
+        ans = cursor.fetchall()
+        tasks = [Task(*t) for t in ans]
         self.db.commit() 
         cursor.close()
-        return result    
+        return tasks    
 
     def get_task_by_id(self, id: int) -> Task:
         cursor = self.db.cursor()
         cursor.execute("SELECT * FROM task WHERE id = %s", (id,))
-        r = cursor.fetchall()
-        task = Task(r[0][0],r[0][1],r[0][2],r[0][3])
+        args = cursor.fetchall()[0]             
+        task = Task(*args)
         self.db.commit() 
         cursor.close()               
         return task   
 
     def insert_task(self, task: Task) -> Task:
+        start_time = datetime.now()
         cursor = self.db.cursor()
-        cursor.execute("INSERT INTO task (title, description) VALUES (%s, %s)", 
-                       (task.title, task.description))
+        cursor.execute("INSERT INTO task (title, description, start_time) VALUES (%s, %s, %s)", 
+                       (task.title, task.description, start_time))
         self.db.commit()
         task.id = cursor.lastrowid
         cursor.close()
         return task
 
-    def update_task(self, task: Task):
+    def update_task(self, task: Task):        
+        if task.status == 'done':
+            task.end_time =  datetime.now()
         cursor = self.db.cursor()
-        cursor.execute("UPDATE task SET title = %s, description = %s, status=%s WHERE id=%s", 
-                       (task.title, task.description, task.status, task.id))
+        cursor.execute("UPDATE task SET title = %s, description = %s, status=%s, end_time=%s WHERE id=%s", 
+                       (task.title, task.description, task.status, task.end_time, task.id))
         self.db.commit()
         cursor.close()
         return 
@@ -51,5 +57,15 @@ class MySQLdb(Storage):
         cursor.close()
         return 
 
+
+    def get_sorted_task(self, status: str):
+        cursor = self.db.cursor()
+        cursor.execute("SELECT * FROM task WHERE status = %s", (status,))
+        result = cursor.fetchall()
+        self.db.commit() 
+        cursor.close()
+        return result
+    
+    
     def close_connection(self):
         self.db.close()

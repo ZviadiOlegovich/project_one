@@ -1,4 +1,6 @@
 from app.task import Task
+from app.comment import Comment
+from app.comment_interface import CommentStorage
 from app.storage import Storage
 from app.validator_interface import Validator
 from app.filter_interface import Filter
@@ -8,11 +10,23 @@ from app.add_eventL_interface import Notificator
 
 class App:
     def __init__(self, db: Storage, validator : Validator,
-                 filter : Filter, notify: Notificator):
+                 filter : Filter, notify: Notificator,
+                 comment: CommentStorage):
         self.db = db
         self.vd = validator
         self.fl = filter
         self.nf = notify
+        self.cm = comment
+        
+        
+    def get_comments_by_id(self, id):               
+        comments = self.cm.get_comment(id)
+        return comments
+    
+    def insert_comment(self, comment: Comment):
+        comment = self.cm.add_comment(comment)        
+        return {"Commetn added": 'successfully', 'Comment_id': comment.id}
+        
 
     def info(self):
         return self.db.info()  
@@ -20,7 +34,10 @@ class App:
     def find_tasks(self):
         return self.db.get_all_tasks()
     
-    def find_task_by_id(self, id):               
+    def sort_by_status(self, status):
+        return self.db.get_sorted_task(status)
+    
+    def find_task_by_id(self, id) -> Task:               
         task = self.db.get_task_by_id(id)
         return task
         

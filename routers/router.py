@@ -1,6 +1,7 @@
 from flask import jsonify, request
 from app.app import App
 from app.task import Task
+from app.comment import Comment
 from datetime import datetime
 import sys
 import traceback
@@ -18,6 +19,39 @@ class TaskRoutes:
         self.router.route('/data', methods=['POST'], endpoint='insert_task')(self.insert_task)
         self.router.route('/data/<int:id>', methods=['PUT'], endpoint='update_task')(self.update_task)
         self.router.route('/data/<int:id>', methods=['DELETE'], endpoint='delete_task')(self.delete_task)
+        self.router.route('/data/sort/<string:status>', methods=['GET'], endpoint='sort_by_status')(self.sort_by_status)
+        self.router.route('/comment/<int:id>', methods=['GET'], endpoint='get_comments_by_id')(self.get_comments_by_id)
+        self.router.route('/comment', methods=['POST'], endpoint='insert_comment')(self.insert_comment)
+
+    
+    
+    
+    def get_comments_by_id(self, id):
+        try:            
+            comments = self.app.get_comments_by_id(id)
+            return [comment.to_json() for comment in comments]
+        except Exception:
+            ans = f"comment {id} - not found1"
+            return handling_exceptions(ans)
+        
+    def insert_comment(self):
+        try:
+            task_id = request.json.get('task_id')
+            message = request.json.get('message')
+            comment = Comment(0, task_id, message)
+            result = self.app.insert_comment(comment)
+            return jsonify(result)
+        except Exception:
+            return handling_exceptions('insert_comment')
+        
+         
+    def sort_by_status(self, status):
+        try:
+            tasks = self.app.sort_by_status(status)
+            return jsonify(tasks)
+
+        except Exception:
+            return handling_exceptions()   
 
     def index(self):
         return self.app.info()
@@ -25,17 +59,16 @@ class TaskRoutes:
     def get_all_tasks(self):
         try:
             tasks = self.app.find_tasks()
-            return jsonify(tasks)
+            return [task.to_json() for task in tasks]
 
         except Exception:
-            return handling_exceptions()
+            return handling_exceptions('all')
         
 
     def get_task_by_id(self, id):
         try:            
             task = self.app.find_task_by_id(id)
-            return jsonify({'title' : task.title,
-                            'description' : task.description})
+            return task.to_json()
         except Exception:
             ans = f"task {id} - not found1"
             return handling_exceptions(ans)

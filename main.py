@@ -2,6 +2,7 @@ import json
 import mysql.connector
 from db.mysql import MySQLdb
 from db.event_log_storage import EventLOGdb
+from app.comment_storage import CommentDb
 from validators.title_length import TitleLengthValidator
 from validators.description_length import DescriptionLengthValidator
 from validators.composite_valid import Composite
@@ -27,13 +28,14 @@ port=config['port']
     )
 db = MySQLdb(db_con)
 els = EventLOGdb(db_con)
+cmnt = CommentDb(db_con)
 notify1 = EventLog(els)
 notify = CompositeNotify([notify1])
 validator1, validator2  = TitleLengthValidator(), DescriptionLengthValidator()
 validator = Composite([validator1, validator2])
 filter1, filter2 = WhitespaceFilter(), CapitalizeFilter()
 filter = CompositeFilter([filter1, filter2])
-app = App(db, validator, filter, notify)
+app = App(db, validator, filter, notify, cmnt)
 router = Flask(__name__)
 task_routes = TaskRoutes(app, router)
 

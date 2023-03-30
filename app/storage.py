@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from app.task import Task
 
+
 class Storage(ABC):
  
     @abstractmethod
@@ -8,7 +9,7 @@ class Storage(ABC):
         pass
 
     @abstractmethod
-    def get_all_tasks(self, id: int):
+    def get_all_tasks(self, id: int) -> list:
         pass
 
     @abstractmethod
@@ -20,11 +21,14 @@ class Storage(ABC):
         pass
 
     @abstractmethod
-    def update_task(self, task: Task) -> Task:
+    def update_task(self, task: Task) :
         pass
 
     @abstractmethod
     def delete_task_by_id(self, id: int):
         pass
 
+    @abstractmethod
+    def get_sorted_task(self,status: str):
+        pass
    
