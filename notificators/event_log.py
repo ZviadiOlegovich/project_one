@@ -1,6 +1,6 @@
-from app.add_eventL_interface import Notificator
+from interfaces.event_log_interface import Notificator
 from app.task import Task
-from app.notify_interface import EventLogStorage
+from interfaces.notify_interface import EventLogStorage
 
 class EventLog(Notificator):
     def __init__(self, db : EventLogStorage):

@@ -1,5 +1,5 @@
 from app.task import Task
-from app.validator_interface import Validator
+from interfaces.validator_interface import Validator
 
 class DescriptionLengthValidator(Validator):# title langth validator
         

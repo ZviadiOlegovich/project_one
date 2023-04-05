@@ -1,4 +1,4 @@
-from app.add_eventL_interface import Notificator
+from interfaces.event_log_interface import Notificator
 from app.task import Task
 
 class CompositeNotify(Notificator):

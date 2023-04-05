@@ -5,7 +5,7 @@ class CommentStorage(ABC):
     
         
     @abstractmethod
-    def get_comment(self, id : int) -> list:
+    def get_comments_by_id(self, id : int) -> list:
         pass
     
     
