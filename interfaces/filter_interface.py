@@ -1,10 +1,10 @@
 from abc import ABC, abstractmethod
-from app.task import Task
-from app.comment import Comment 
+from entities.task import Task
+from entities.comment import Comment 
 
 class Filter(ABC):# validator
     
     @abstractmethod
-    def is_filter(self, object) -> Task|Comment:
+    def is_filter(self, args):
         pass #isvalid
         

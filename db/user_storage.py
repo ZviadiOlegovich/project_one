@@ -1,5 +1,5 @@
 from interfaces.user_st_interface import UserStorage
-from app.user import User
+from entities.user import User
 
 
 class UserDb(UserStorage):

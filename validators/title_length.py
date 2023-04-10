@@ -1,4 +1,4 @@
-from app.task import Task
+from entities.task import Task
 from interfaces.validator_interface import Validator
 
 class TitleLengthValidator(Validator):# title langth validator

@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from app.user import User
+from entities.user import User
 
 class UserStorage(ABC):
     

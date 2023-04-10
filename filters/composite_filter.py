@@ -1,6 +1,7 @@
-from app.task import Task
-from app.comment import Comment 
+from entities.task import Task
+from entities.comment import Comment 
 from interfaces.filter_interface import Filter
+from entities.user import User
 
 
 class CompositeFilter(Filter):# title langth validator
@@ -9,9 +10,9 @@ class CompositeFilter(Filter):# title langth validator
         self.filters = filters
         
                
-    def is_filter(self, object) -> Task|Comment:
+    def is_filter(self, args) -> list:
         
         for f in self.filters: 
-            object = f.is_filter(object)           
+            args = f.is_filter(args)           
             
-        return  object
+        return  args

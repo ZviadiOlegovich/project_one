@@ -1,8 +1,12 @@
 from abc import ABC, abstractmethod
-from app.task import Task
+from entities.event import Event
 
-class Notificator(ABC):
+class EventLogStorage(ABC):
     
     @abstractmethod
-    def notify(self, task : Task, event : str): 
+    def insert(self, event : Event): 
+        pass
+    
+    @abstractmethod
+    def get_task_event_by_id(self, id : int):
         pass

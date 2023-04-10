@@ -1,8 +1,8 @@
 from flask import jsonify, request
 from app.app import App
-from app.task import Task
-from app.comment import Comment
-from app.user import User
+from entities.task import Task
+from entities.comment import Comment
+from entities.user import User
 from datetime import datetime
 import sys
 import traceback
@@ -13,7 +13,7 @@ class TaskRoutes:
         self.app = app
         self.router = router
         self.register_routes()
-
+# гет запрос на евент лог (как с коментами)
     def register_routes(self):
         self.router.route('/', methods=['GET'], endpoint='index')(self.index)
         self.router.route('/task/', methods=['GET'], endpoint='get_all_tasks')(self.get_all_tasks)
@@ -22,12 +22,25 @@ class TaskRoutes:
         self.router.route('/task/<int:id>', methods=['PUT'], endpoint='update_task')(self.update_task)
         self.router.route('/task/<int:id>', methods=['DELETE'], endpoint='delete_task')(self.delete_task)
         self.router.route('/task/sort/<string:status>', methods=['GET'], endpoint='sort_by_status')(self.sort_by_status)
-        self.router.route('/comment/<int:id>', methods=['GET'], endpoint='get_comments_by_id')(self.get_comments_by_id)
-        self.router.route('/comment', methods=['POST'], endpoint='insert_comment')(self.insert_comment)
+        
+        self.router.route('/task/<int:id>/comment', methods=['GET'], endpoint='get_comments_by_id')(self.get_comments_by_id)
+        self.router.route('/task/<int:id>/comment', methods=['POST'], endpoint='insert_comment')(self.insert_comment)
+        
+        self.router.route('/task/<int:id>/event_log', methods=['GET'], endpoint='get_events_by_id')(self.get_task_event_by_id)
+        
         self.router.route('/user/<int:id>', methods=['GET'], endpoint='get_user_by_id')(self.get_user_by_id)
         self.router.route('/user', methods=['POST'], endpoint='insert_user')(self.insert_user)
-        self.router.route('/user/<int:id>', methods=['DELETE'], endpoint='delete_user_by_id')(self.delete_user_by_id)
+        self.router.route('/user/<int:id>', methods=['DELETE'], endpoint='delete_user_by_id')(self.delete_user_by_id)    
 
+
+    # запросы к коментариям
+    def get_task_event_by_id(self, id):
+        try:            
+            events = self.app.get_task_event_by_id(id)
+            return [event.__dict__ for event in events]
+        except Exception:
+            ans = f"even by task_id {id} - not found"
+            return handling_exceptions(ans)
 
     # запросы к пользолвателям
     def get_user_by_id(self, id):
@@ -69,12 +82,12 @@ class TaskRoutes:
             ans = f"comment {id} - not found"
             return handling_exceptions(ans)
         
-    def insert_comment(self):
+    def insert_comment(self, id):
         try:
-            task_id = request.json.get('task_id')
-            user_id = request.json.get('user_id')
+            task_id = id            
+            author = request.json.get('author')
             message = request.json.get('message')            
-            comment = Comment(0, task_id, user_id, message)
+            comment = Comment(0, task_id, author, message)
             result = self.app.insert_comment(comment)
             return jsonify(result)
         except Exception:
@@ -96,7 +109,7 @@ class TaskRoutes:
     def get_all_tasks(self):
         try:
             tasks = self.app.get_all_tasks()
-            return [task.to_json() for task in tasks]
+            return [task.__dict__ for task in tasks]
 
         except Exception:
             return handling_exceptions('all')
@@ -105,8 +118,8 @@ class TaskRoutes:
     def get_task_by_id(self, id):
         try:            
             task = self.app.get_task_by_id(id)
-            comments = self.app.get_comments_by_id(id)
-            return jsonify(task.to_json() , [comment.to_json() for comment in comments])
+            # comments = self.app.get_comments_by_id(id)
+            return task.__dict__ #, [comment.to_json() for comment in comments])
         except Exception:
             ans = f"task {id} - not found1"
             return handling_exceptions(ans)

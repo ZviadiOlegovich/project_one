@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from app.comment import Comment
+from entities.comment import Comment
 
 class CommentStorage(ABC):
     

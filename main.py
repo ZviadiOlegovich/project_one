@@ -1,6 +1,6 @@
 import json
 import mysql.connector
-from db.mysql_storage import MySQLdb
+from db.mysql_storage import MySQLDb
 from db.event_log_storage import EventLogDb
 from db.comment_storage import CommentDb
 from db.user_storage import UserDb
@@ -10,7 +10,7 @@ from validators.composite_valid import Composite
 from filters.trip_filter import WhitespaceFilter
 from filters.upper_filter import CapitalizeFilter
 from filters.composite_filter import CompositeFilter
-from notificators.event_log import EventLog
+from notificators.notify_in_log import NotifyInLog
 from notificators.composite_notify import CompositeNotify
 from app.app import App
 from flask import Flask
@@ -27,17 +27,17 @@ db_con = mysql.connector.connect(host=config['host'],
                                  port=config['port'])
 
 
-db = MySQLdb(db_con)
+db = MySQLDb(db_con)
 els = EventLogDb(db_con)
-cmnt = CommentDb(db_con)
+cmnt = CommentDb(db_con) 
 user = UserDb(db_con)
-notify1 = EventLog(els)
+notify1 = NotifyInLog(els)
 notify = CompositeNotify([notify1])
 validator1, validator2  = TitleLengthValidator(), DescriptionLengthValidator()
 validator = Composite([validator1, validator2])
 filter1, filter2 = WhitespaceFilter(), CapitalizeFilter()
 filter = CompositeFilter([filter1, filter2])
-app = App(db, validator, filter, notify, cmnt, user)
+app = App(db, cmnt, user, els, validator, filter, notify)
 router = Flask(__name__)
 task_routes = TaskRoutes(app, router)
 

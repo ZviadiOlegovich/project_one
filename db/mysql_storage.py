@@ -1,10 +1,10 @@
 # import mysql.connector
 from datetime import datetime
 from interfaces.mysql_interface import Storage
-from app.task import Task
+from entities.task import Task
 
 
-class MySQLdb(Storage):
+class MySQLDb(Storage):
     def __init__(self, connect):
         self.db = connect
         
@@ -33,8 +33,8 @@ class MySQLdb(Storage):
     def insert_task(self, task: Task) -> Task:
         start_time = datetime.now()
         cursor = self.db.cursor()
-        cursor.execute("INSERT INTO task (title, description, author_id, executor_id, start_time) VALUES (%s, %s, %s, %s, %s)", 
-                       (task.title, task.description, task.author_id, task.executor_id, start_time))
+        cursor.execute("INSERT INTO task (title, description, author, assignee, start_time) VALUES (%s, %s, %s, %s, %s)", 
+                       (task.title, task.description, task.author, task.assignee, start_time))
         self.db.commit()
         task.id = cursor.lastrowid
         cursor.close()

@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from app.task import Task
+from entities.task import Task
 
 
 class Storage(ABC):

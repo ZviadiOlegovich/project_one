@@ -1,15 +1,16 @@
-from interfaces.event_log_interface import Notificator
-from app.task import Task
+from interfaces.notify_interface import Notificator
+from entities.event import Event
+
 
 class CompositeNotify(Notificator):
     
     def __init__(self, notifies : list):
         self.notifies = notifies
         
-    def notify(self, task: Task, event: str):
+    def notify(self, event: Event):
         
         for n in self.notifies: 
-            n.notify(task, event)   
+            n.notify(event)   
              
         return
     
