@@ -6,7 +6,7 @@ class User:
         self.id = id
         self.name = name
         self.surname = surname
-        self.position = position
+        self.position = position # директр менеджер юзер
         
         
     def to_dict(self):
